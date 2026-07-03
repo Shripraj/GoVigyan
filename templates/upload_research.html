@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+        <div class="card p-5">
+            <h2 class="text-center mb-4">
+                <i class="fas fa-upload"></i> Upload Research
+            </h2>
+
+            <form id="uploadResearchForm" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Research Title</label>
+                    <input type="text" class="form-control" id="title" name="title" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="file" class="form-label">Research File (PDF, DOC, DOCX)</label>
+                    <input type="file" class="form-control" id="file" name="file" accept=".pdf,.doc,.docx" required>
+                </div>
+
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> Your research will be sent to the admin for approval before being published.
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-paper-plane"></i> Submit Research
+                    </button>
+                </div>
+            </form>
+
+            <div id="successMessage" class="alert alert-success mt-3" style="display:none;">
+                <i class="fas fa-check-circle"></i> Research uploaded successfully! It will be reviewed by an admin.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('uploadResearchForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+
+    fetch('{{ url_for("upload_research") }}', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById('successMessage').style.display = 'block';
+            this.reset();
+            setTimeout(() => {
+                window.location.href = '{{ url_for("research_history") }}';
+            }, 2000);
+        }
+    })
+    .catch(error => {
+        alert('Error uploading research: ' + error);
+    });
+});
+</script>
+{% endblock %}

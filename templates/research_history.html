@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row mt-4">
+    <div class="col-md-12">
+        <h2 class="mb-4"><i class="fas fa-history"></i> Upload History</h2>
+    </div>
+</div>
+
+{% if researches %}
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Uploaded</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for research in researches %}
+            <tr id="research-{{ research.id }}">
+                <td>{{ research.title }}</td>
+                <td>{{ research.description[:50] }}...</td>
+                <td>
+                    {% if research.status == 'pending' %}
+                        <span class="badge bg-warning">Pending</span>
+                    {% elif research.status == 'approved' %}
+                        <span class="badge bg-success">Approved</span>
+                    {% else %}
+                        <span class="badge bg-danger">Rejected</span>
+                    {% endif %}
+                </td>
+                <td>{{ research.uploaded_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>
+                    <button class="btn btn-danger btn-sm" onclick="deleteResearch({{ research.id }})">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="alert alert-info">
+    <i class="fas fa-info-circle"></i> No research uploads yet. Start by uploading your first research paper!
+</div>
+{% endif %}
+
+<script>
+function deleteResearch(id) {
+    if (!confirm('Are you sure you want to delete this research?')) return;
+
+    fetch(`/delete-research/${id}`, {
+        method: 'POST'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById(`research-${id}`).remove();
+        }
+    });
+}
+</script>
+{% endblock %}

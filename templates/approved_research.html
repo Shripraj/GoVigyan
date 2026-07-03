@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row mt-4">
+    <div class="col-md-12">
+        <h2 class="mb-4"><i class="fas fa-file-alt"></i> Approved Research Papers</h2>
+    </div>
+</div>
+
+{% if researches %}
+<div class="row g-4">
+    {% for research in researches %}
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header bg-success text-white">
+                <h5>{{ research.title }}</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Author:</strong> {{ research.user.name }}</p>
+                <p><strong>Description:</strong> {{ research.description }}</p>
+                <p><strong>Approved:</strong> {{ research.approved_at.strftime('%Y-%m-%d') if research.approved_at else 'N/A' }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info">
+    <i class="fas fa-info-circle"></i> No approved research papers available yet.
+</div>
+{% endif %}
+{% endblock %}

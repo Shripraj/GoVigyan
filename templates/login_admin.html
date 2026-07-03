@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    .login-container {
+        min-height: 85vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f8f9fa;
+        margin: -20px -15px;
+        padding: 60px 15px;
+    }
+
+    .login-card {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 60px 50px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12),
+                    0 0 40px rgba(34, 197, 94, 0.6),
+                    0 0 80px rgba(34, 197, 94, 0.3);
+        max-width: 480px;
+        width: 100%;
+        border: 2px solid #22c55e;
+        animation: glow 3s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+        0%, 100% {
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12),
+                        0 0 40px rgba(34, 197, 94, 0.6),
+                        0 0 80px rgba(34, 197, 94, 0.3);
+        }
+        50% {
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12),
+                        0 0 50px rgba(34, 197, 94, 0.8),
+                        0 0 100px rgba(34, 197, 94, 0.4);
+        }
+    }
+
+    .admin-icon {
+        font-size: 4rem;
+        color: #22c55e;
+        margin-bottom: 20px;
+    }
+
+    .login-title {
+        color: #1a202c;
+        font-weight: 600;
+        font-size: 1.75rem;
+        margin-bottom: 12px;
+        letter-spacing: -0.5px;
+    }
+
+    .login-subtitle {
+        color: #718096;
+        font-size: 0.95rem;
+        margin-bottom: 40px;
+        font-weight: 400;
+    }
+
+    .btn-google-admin {
+        border: 1px solid #22c55e;
+        border-radius: 6px;
+        padding: 16px 24px;
+        font-size: 1.1rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        background: #22c55e;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+    }
+
+    .btn-google-admin:hover {
+        background: #16a34a;
+        border-color: #16a34a;
+        color: #ffffff;
+        text-decoration: none;
+        transform: translateY(-2px);
+        box-shadow: 0 0 20px rgba(34, 197, 94, 0.6),
+                    0 0 40px rgba(34, 197, 94, 0.3),
+                    0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-google-admin i {
+        margin-right: 12px;
+        font-size: 1.3rem;
+    }
+
+    .admin-notice {
+        margin-top: 30px;
+        padding: 16px;
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        border-radius: 8px;
+        color: #166534;
+        font-size: 0.9rem;
+        text-align: center;
+    }
+
+    .admin-notice strong {
+        color: #15803d;
+    }
+
+    @media (max-width: 768px) {
+        .login-card {
+            padding: 40px 30px;
+        }
+
+        .login-title {
+            font-size: 1.5rem;
+        }
+
+        .admin-icon {
+            font-size: 3rem;
+        }
+    }
+</style>
+
+<div class="login-container">
+    <div class="login-card">
+        <div class="text-center">
+            <i class="fas fa-user-shield admin-icon"></i>
+            <h2 class="login-title">Admin Login</h2>
+            <p class="login-subtitle">Only authorized admin can access this panel</p>
+        </div>
+
+        <a href="{{ url_for('google_admin_login') }}" class="btn-google-admin w-100">
+            <i class="fab fa-google"></i> Sign in with Google (Admin Only)
+        </a>
+
+        <div class="admin-notice">
+            <small>
+                Only <strong>authorized administrators</strong> are allowed.
+            </small>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

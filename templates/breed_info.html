@@ -1,0 +1,480 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .breed-container {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e8f5e9 100%);
+        margin: -20px -15px;
+        padding: 60px 15px;
+        min-height: 100vh;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .breed-container::before {
+        content: '';
+        position: absolute;
+        top: -30%;
+        right: -10%;
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(circle, rgba(34, 197, 94, 0.08) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0) translateX(0); }
+        50% { transform: translateY(30px) translateX(20px); }
+    }
+
+    .content-wrapper {
+        position: relative;
+        z-index: 1;
+    }
+
+    .page-header {
+        text-align: center;
+        margin-bottom: 50px;
+        animation: fadeInDown 0.8s ease-out;
+    }
+
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #1a202c;
+        margin-bottom: 15px;
+    }
+
+    .page-title i {
+        color: #22c55e;
+        margin-right: 15px;
+    }
+
+    .page-subtitle {
+        color: #718096;
+        font-size: 1.1rem;
+    }
+
+    .breed-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        overflow: hidden;
+        border: 2px solid transparent;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        margin-bottom: 30px;
+    }
+
+    .breed-card:hover {
+        border-color: #22c55e;
+        transform: translateY(-5px);
+        box-shadow: 0 0 30px rgba(34, 197, 94, 0.5),
+                    0 0 60px rgba(34, 197, 94, 0.25),
+                    0 12px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .breed-header {
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        color: white;
+        padding: 20px 25px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .breed-header i {
+        font-size: 1.5rem;
+    }
+
+    .breed-header h4 {
+        margin: 0;
+        font-size: 1.4rem;
+        font-weight: 700;
+    }
+
+    .breed-content {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .breed-image-section {
+        flex: 0 0 40%;
+        max-width: 40%;
+        padding: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    }
+
+    .breed-image-wrapper {
+        width: 100%;
+        height: 300px;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        border: 3px solid #22c55e;
+        position: relative;
+    }
+
+    .breed-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .breed-card:hover .breed-image {
+        transform: scale(1.1);
+    }
+
+    .breed-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(34, 197, 94, 0.95);
+        color: white;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .breed-info-section {
+        flex: 1;
+        padding: 30px;
+    }
+
+    .breed-info-item {
+        margin-bottom: 25px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #e2e8f0;
+        transition: all 0.3s ease;
+    }
+
+    .breed-info-item:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    .breed-info-item:hover {
+        padding-left: 10px;
+    }
+
+    .info-label {
+        font-weight: 700;
+        color: #22c55e;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .info-label i {
+        font-size: 1rem;
+    }
+
+    .info-value {
+        color: #4a5568;
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    .milk-production {
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%);
+        padding: 15px 18px;
+        border-radius: 8px;
+        border-left: 4px solid #22c55e;
+    }
+
+    .milk-production .info-value {
+        font-size: 1.1rem;
+    }
+
+    .milk-production strong {
+        font-size: 1.4rem;
+        color: #22c55e;
+    }
+
+    @media (max-width: 992px) {
+        .breed-content {
+            flex-direction: column;
+        }
+
+        .breed-image-section {
+            flex: 0 0 100%;
+            max-width: 100%;
+            padding: 20px;
+        }
+
+        .breed-image-wrapper {
+            height: 250px;
+        }
+
+        .breed-info-section {
+            padding: 20px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .page-title {
+            font-size: 2rem;
+        }
+
+        .breed-image-wrapper {
+            height: 200px;
+        }
+    }
+</style>
+
+<div class="breed-container">
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <div class="page-header">
+                <h2 class="page-title">
+                    <i class="fas fa-book"></i> Breed Information
+                </h2>
+                <p class="page-subtitle">Comprehensive guide to cattle and buffalo breeds</p>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    {% set breeds_info = {
+                        "Ayrshire cattle": {
+                            "description": "A high-quality dairy cattle breed known for consistent milk yield.",
+                            "origin": "Scotland",
+                            "avg_milk_production": 6000,
+                            "characteristics": "Red & white coat, hardy, efficient grazer",
+                            "image_path": "static/images/Ayrshirecattle.jpg"
+                        },
+                        "Brown Swiss cattle": {
+                            "description": "One of the oldest dairy cattle breeds with very high milk quality.",
+                            "origin": "Switzerland",
+                            "avg_milk_production": 7000,
+                            "characteristics": "Brown coat, strong frame, calm temperament",
+                            "image_path": "/static/images/BrownSwisscattle.jpg"
+                        },
+                        "Chhattisgarhi": {
+                            "description": "Indigenous cattle breed adapted to hot and humid climates.",
+                            "origin": "Chhattisgarh, India",
+                            "avg_milk_production": 350,
+                            "characteristics": "Medium build, hardy, drought tolerant",
+                            "image_path": "/static/images/chhattisgarhi.jpg"
+                        },
+                        "Holstein Friesian cattle": {
+                            "description": "World's highest milk-producing dairy breed.",
+                            "origin": "Netherlands",
+                            "avg_milk_production": 8000,
+                            "characteristics": "Black and white coat, large frame",
+                            "image_path": "/static/images/HolsteinFriesiancattle.jpg"
+                        },
+                        "Jaffarabadi": {
+                            "description": "A large, heavy buffalo breed known for high milk yield.",
+                            "origin": "Gujarat, India",
+                            "avg_milk_production": 2500,
+                            "characteristics": "Massive body, strong horns, robust",
+                            "image_path": "/static/images/Jafarabadi_buffalo.jpg"
+                        },
+                        "Jersey cattle": {
+                            "description": "Famous dairy breed known for very high butterfat percentage.",
+                            "origin": "Jersey (Channel Islands)",
+                            "avg_milk_production": 4500,
+                            "characteristics": "Fawn coat, docile, heat tolerant",
+                            "image_path": "/static/images/Jerseycattle.jpg"
+                        },
+                        "Red Dane cattle": {
+                            "description": "A dairy breed known for strong health and good milk yield.",
+                            "origin": "Denmark",
+                            "avg_milk_production": 5500,
+                            "characteristics": "Red coat, sturdy build",
+                            "image_path": "/static/images/RedDanecattle.jpg"
+                        },
+                        "banni": {
+                            "description": "A hardy Indian buffalo breed famous for drought resistance.",
+                            "origin": "Kutch, Gujarat",
+                            "avg_milk_production": 2500,
+                            "characteristics": "Black, robust, heat tolerant",
+                            "image_path": "/static/images/banni.jpeg"
+                        },
+                        "bargur": {
+                            "description": "A draught cattle breed used for farming in hilly regions.",
+                            "origin": "Tamil Nadu, India",
+                            "avg_milk_production": 400,
+                            "characteristics": "Reddish-brown, fast, active",
+                            "image_path": "/static/images/bargur.jpg"
+                        },
+                        "bhadwari": {
+                            "description": "Buffalo breed known for high butterfat percentage in milk.",
+                            "origin": "Uttar Pradesh & Madhya Pradesh",
+                            "avg_milk_production": 1800,
+                            "characteristics": "Copper brown, compact body",
+                            "image_path": "/static/images/bhadwari.jpg"
+                        },
+                        "chilika": {
+                            "description": "Indigenous cattle breed found near Chilika Lake.",
+                            "origin": "Odisha, India",
+                            "avg_milk_production": 350,
+                            "characteristics": "Small, hardy, adapted to wetland areas",
+                            "image_path": "/static/images/chilika.jpg"
+                        },
+                        "gojri": {
+                            "description": "Buffalo breed raised by the Gujjar community.",
+                            "origin": "Jammu & Kashmir / Himachal",
+                            "avg_milk_production": 2000,
+                            "characteristics": "Strong, adapted to hilly terrain",
+                            "image_path": "/static/images/gojri.jpg"
+                        },
+                        "kalahandi": {
+                            "description": "Native cattle breed from tribal regions.",
+                            "origin": "Odisha, India",
+                            "avg_milk_production": 300,
+                            "characteristics": "Small body, hardy, disease resistant",
+                            "image_path": "/static/images/kalahandi.jpg"
+                        },
+                        "luit": {
+                            "description": "A regional cattle breed found near the Brahmaputra valley.",
+                            "origin": "Assam, India",
+                            "avg_milk_production": 300,
+                            "characteristics": "Small to medium size, heat tolerant",
+                            "image_path": "/static/images/luit.jpg"
+                        },
+                        "marathwada": {
+                            "description": "Multipurpose breed adapted to dry climatic conditions.",
+                            "origin": "Maharashtra, India",
+                            "avg_milk_production": 400,
+                            "characteristics": "Hardy, strong, agricultural use",
+                            "image_path": "/static/images/marathwada.jpg"
+                        },
+                        "mehsana": {
+                            "description": "A major Indian buffalo breed with excellent milk yield.",
+                            "origin": "Gujarat, India",
+                            "avg_milk_production": 2200,
+                            "characteristics": "Long face, strong build",
+                            "image_path": "/static/images/mehsana.jpg"
+                        },
+                        "murrah": {
+                            "description": "India's highest milk-yielding buffalo breed.",
+                            "origin": "Haryana & Punjab",
+                            "avg_milk_production": 2700,
+                            "characteristics": "Jet black, curled horns, compact body",
+                            "image_path": "/static/images/murrah.jpg"
+                        },
+                        "nagpuri": {
+                            "description": "Heat-tolerant buffalo breed from the Vidarbha region.",
+                            "origin": "Maharashtra, India",
+                            "avg_milk_production": 1500,
+                            "characteristics": "Straight horns, adapted to extreme heat",
+                            "image_path": "/static/images/nagpuri.jpg"
+                        },
+                        "nili-ravi": {
+                            "description": "High-yielding buffalo breed also called 'Black Gold'.",
+                            "origin": "Punjab (India & Pakistan)",
+                            "avg_milk_production": 2500,
+                            "characteristics": "Dark color, strong frame",
+                            "image_path": "/static/images/niliravi.jpg"
+                        },
+                        "pandharpuri": {
+                            "description": "Buffalo breed with unique long, twisted horns.",
+                            "origin": "Maharashtra, India",
+                            "avg_milk_production": 1500,
+                            "characteristics": "Very long horns, good adaptability",
+                            "image_path": "/static/images/pandharpuri.jpg"
+                        },
+                        "surti": {
+                            "description": "Medium-yield buffalo breed known for gentle nature.",
+                            "origin": "Gujarat, India",
+                            "avg_milk_production": 1800,
+                            "characteristics": "Sickle-shaped horns, compact",
+                            "image_path": "/static/images/surti.jpg"
+                        },
+                        "toda": {
+                            "description": "Rare cattle breed from Nilgiri hills raised by Toda tribe.",
+                            "origin": "Tamil Nadu, India",
+                            "avg_milk_production": 300,
+                            "characteristics": "Distinctive markings, small & hardy",
+                            "image_path": "/static/images/toda.jpg"
+                        }
+                    } %}
+
+                    {% for breed_name, info in breeds_info.items() %}
+                    <div class="breed-card">
+                        <div class="breed-header">
+                            <i class="fas fa-cow"></i>
+                            <h4>{{ breed_name }}</h4>
+                        </div>
+
+                        <div class="breed-content">
+                            <!-- Image Section -->
+                            <div class="breed-image-section">
+                                <div class="breed-image-wrapper">
+                                    <img src="{{ info.image_path }}"
+                                         alt="{{ breed_name }}"
+                                         class="breed-image"
+                                         onerror="this.src='https://via.placeholder.com/800x500/22c55e/ffffff?text={{ breed_name.replace(' ', '+') }}'">
+                                    <div class="breed-badge">
+                                        <i class="fas fa-certificate"></i> Verified
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Info Section -->
+                            <div class="breed-info-section">
+                                <div class="breed-info-item">
+                                    <div class="info-label">
+                                        <i class="fas fa-align-left"></i> Description
+                                    </div>
+                                    <div class="info-value">{{ info.description }}</div>
+                                </div>
+
+                                <div class="breed-info-item">
+                                    <div class="info-label">
+                                        <i class="fas fa-map-marker-alt"></i> Origin
+                                    </div>
+                                    <div class="info-value">{{ info.origin }}</div>
+                                </div>
+
+                                <div class="breed-info-item milk-production">
+                                    <div class="info-label">
+                                        <i class="fas fa-tint"></i> Average Milk Production
+                                    </div>
+                                    <div class="info-value">
+                                        <strong>{{ info.avg_milk_production }}</strong> liters/year
+                                    </div>
+                                </div>
+
+                                <div class="breed-info-item">
+                                    <div class="info-label">
+                                        <i class="fas fa-star"></i> Key Characteristics
+                                    </div>
+                                    <div class="info-value">{{ info.characteristics }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

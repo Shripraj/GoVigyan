@@ -1,0 +1,503 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .home-container {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e8f5e9 100%);
+        margin: -20px -15px -20px -15px;
+        padding: 0;
+        min-height: 100vh;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .home-container::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -10%;
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(circle, rgba(34, 197, 94, 0.1) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: float 6s ease-in-out infinite;
+    }
+
+    .home-container::after {
+        content: '';
+        position: absolute;
+        bottom: -50%;
+        left: -10%;
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(circle, rgba(34, 197, 94, 0.08) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: float 8s ease-in-out infinite reverse;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0) translateX(0); }
+        50% { transform: translateY(30px) translateX(20px); }
+    }
+
+    .content-wrapper {
+        position: relative;
+        z-index: 1;
+        padding: 80px 15px 60px;
+    }
+
+    .hero-section {
+        text-align: center;
+        margin-bottom: 70px;
+        animation: fadeInDown 1s ease-out;
+    }
+
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .hero-title {
+        font-size: 4rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 20px;
+        text-shadow: 0 4px 20px rgba(34, 197, 94, 0.2);
+    }
+
+    .hero-title i {
+        color: #22c55e;
+        -webkit-text-fill-color: #22c55e;
+        filter: drop-shadow(0 4px 10px rgba(34, 197, 94, 0.3));
+    }
+
+    .hero-subtitle {
+        font-size: 1.3rem;
+        color: #4a5568;
+        font-weight: 500;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .feature-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 45px 35px;
+        text-align: center;
+        border: 2px solid transparent;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        height: 100%;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .feature-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #22c55e, #10b981, #22c55e);
+        transform: translateX(-100%);
+        transition: transform 0.6s ease;
+    }
+
+    .feature-card:hover::before {
+        transform: translateX(0);
+    }
+
+    .feature-card:hover {
+        border-color: #22c55e;
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 0 30px rgba(34, 197, 94, 0.5),
+                    0 0 60px rgba(34, 197, 94, 0.25),
+                    0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .feature-icon {
+        font-size: 3.5rem;
+        color: #22c55e;
+        margin-bottom: 25px;
+        transition: all 0.4s ease;
+        display: inline-block;
+    }
+
+    .feature-card:hover .feature-icon {
+        transform: scale(1.15) rotate(5deg);
+        filter: drop-shadow(0 8px 15px rgba(34, 197, 94, 0.4));
+    }
+
+    .feature-card h4 {
+        color: #1a202c;
+        font-weight: 700;
+        margin-bottom: 18px;
+        font-size: 1.4rem;
+    }
+
+    .feature-card p {
+        color: #718096;
+        font-size: 1rem;
+        line-height: 1.7;
+        margin: 0;
+    }
+
+    .cta-card {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.95) 100%);
+        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        padding: 60px 50px;
+        text-align: center;
+        border: 3px solid #22c55e;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12),
+                    0 0 50px rgba(34, 197, 94, 0.6),
+                    0 0 100px rgba(34, 197, 94, 0.3);
+        animation: glowPulse 3s ease-in-out infinite;
+        margin-bottom: 60px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .cta-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg, transparent, rgba(34, 197, 94, 0.1), transparent);
+        transform: rotate(45deg);
+        animation: shine 3s infinite;
+    }
+
+    @keyframes shine {
+        0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+    }
+
+    @keyframes glowPulse {
+        0%, 100% {
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12),
+                        0 0 50px rgba(34, 197, 94, 0.6),
+                        0 0 100px rgba(34, 197, 94, 0.3);
+        }
+        50% {
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12),
+                        0 0 70px rgba(34, 197, 94, 0.8),
+                        0 0 130px rgba(34, 197, 94, 0.4);
+        }
+    }
+
+    .cta-card h2 {
+        color: #1a202c;
+        font-weight: 700;
+        font-size: 2.3rem;
+        margin-bottom: 25px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .cta-card p {
+        color: #4a5568;
+        font-size: 1.1rem;
+        margin-bottom: 35px;
+        line-height: 1.8;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+        position: relative;
+        z-index: 1;
+    }
+
+    .btn-cta {
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        color: #ffffff;
+        border: none;
+        border-radius: 12px;
+        padding: 18px 50px;
+        font-size: 1.15rem;
+        font-weight: 700;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        text-decoration: none;
+        display: inline-block;
+        position: relative;
+        z-index: 1;
+        box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+        overflow: hidden;
+    }
+
+    .btn-cta::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.5s;
+    }
+
+    .btn-cta:hover::before {
+        left: 100%;
+    }
+
+    .btn-cta:hover {
+        background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+        color: #ffffff;
+        transform: translateY(-4px) scale(1.05);
+        box-shadow: 0 0 35px rgba(34, 197, 94, 0.7),
+                    0 0 70px rgba(34, 197, 94, 0.4),
+                    0 12px 30px rgba(0, 0, 0, 0.2);
+        text-decoration: none;
+    }
+
+    .btn-cta:active {
+        transform: translateY(-2px) scale(1.03);
+    }
+
+    .btn-cta i {
+        margin-right: 12px;
+    }
+
+    .info-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 40px 35px;
+        border: 2px solid transparent;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        height: 100%;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .info-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #22c55e, #10b981, #22c55e);
+        transform: translateX(-100%);
+        transition: transform 0.6s ease;
+    }
+
+    .info-card:hover::before {
+        transform: translateX(0);
+    }
+
+    .info-card:hover {
+        border-color: #22c55e;
+        transform: translateY(-8px);
+        box-shadow: 0 0 30px rgba(34, 197, 94, 0.5),
+                    0 0 60px rgba(34, 197, 94, 0.25),
+                    0 12px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .info-card h4 {
+        color: #1a202c;
+        font-weight: 700;
+        margin-bottom: 25px;
+        font-size: 1.4rem;
+    }
+
+    .info-card h4 i {
+        color: #22c55e;
+        margin-right: 12px;
+        font-size: 1.5rem;
+    }
+
+    .info-card ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .info-card ul li {
+        color: #4a5568;
+        padding: 14px 0;
+        border-bottom: 1px solid #e2e8f0;
+        font-size: 1rem;
+        position: relative;
+        padding-left: 35px;
+        transition: all 0.3s ease;
+    }
+
+    .info-card ul li:last-child {
+        border-bottom: none;
+    }
+
+    .info-card ul li:before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #22c55e;
+        font-weight: 700;
+        font-size: 1.2rem;
+        width: 24px;
+        height: 24px;
+        background: rgba(34, 197, 94, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+
+    .info-card:hover ul li:before {
+        background: rgba(34, 197, 94, 0.2);
+        transform: scale(1.1);
+    }
+
+    .info-card ul li:hover {
+        color: #1a202c;
+        padding-left: 40px;
+    }
+
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 2.8rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+        }
+
+        .feature-card {
+            padding: 35px 25px;
+            margin-bottom: 25px;
+        }
+
+        .cta-card {
+            padding: 45px 30px;
+        }
+
+        .cta-card h2 {
+            font-size: 1.8rem;
+        }
+
+        .info-card {
+            margin-bottom: 25px;
+        }
+
+        .content-wrapper {
+            padding: 60px 15px 40px;
+        }
+        .feature-card, .info-card, .cta-card {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s ease-out;
+    }
+
+    .revealed {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+    }
+
+    }
+</style>
+
+<div class="home-container">
+    <div class="content-wrapper">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="hero-section">
+                    <h1 class="hero-title">
+                        <i class="fas fa-cow"></i> GoVigyan
+                    </h1>
+                    <p class="hero-subtitle">Advanced AI-Powered Breed Identification for Cattle and Buffalo</p>
+                </div>
+
+                <div class="row g-4 mb-5">
+                    <div class="col-md-4">
+                        <div class="feature-card">
+                            <i class="fas fa-camera feature-icon"></i>
+                            <h4>Image Recognition</h4>
+                            <p>Upload cattle or buffalo images for instant breed identification using advanced machine learning</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="feature-card">
+                            <i class="fas fa-book feature-icon"></i>
+                            <h4>Breed Information</h4>
+                            <p>Access comprehensive database of cattle breeds with detailed characteristics and origins</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="feature-card">
+                            <i class="fas fa-flask feature-icon"></i>
+                            <h4>Research Hub</h4>
+                            <p>Contribute and access research papers on cattle breeding and management</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cta-card">
+                    <h2>Get Started</h2>
+                    <p>Our system provides accurate breed detection for multiple cattle and buffalo breeds including Holstein, Jersey, Gir, Sahiwal, and Murrah.</p>
+                    <a href="{{ url_for('login') }}" class="btn-cta">
+                        <i class="fas fa-sign-in-alt"></i> Start Breed Detection
+                    </a>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="info-card">
+                            <h4><i class="fas fa-users"></i> For Farmers</h4>
+                            <ul>
+                                <li>Quick breed identification</li>
+                                <li>Access breed-specific care information</li>
+                                <li>Track detection history</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="info-card">
+                            <h4><i class="fas fa-microscope"></i> For Researchers</h4>
+                            <ul>
+                                <li>Upload research papers</li>
+                                <li>Manage livestock inventory</li>
+                                <li>Track milk production analytics</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const revealElements = document.querySelectorAll(
+            ".feature-card, .info-card, .cta-card"
+        );
+
+        function revealOnScroll() {
+            revealElements.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < window.innerHeight - 100) {
+                    el.classList.add("revealed");
+                }
+            });
+        }
+
+        window.addEventListener("scroll", revealOnScroll);
+        revealOnScroll();
+    });
+</script>
+
+
+{% endblock %}

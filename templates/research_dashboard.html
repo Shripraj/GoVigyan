@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row mt-4">
+    <div class="col-md-12">
+        <h2 class="mb-4"><i class="fas fa-flask"></i> Research & Inventory Dashboard</h2>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-4">
+        <a href="{{ url_for('breed_detection') }}" class="text-decoration-none">
+            <div class="card dashboard-card p-4 text-center">
+                <i class="fas fa-camera fa-3x mb-3" style="color: var(--primary-color);"></i>
+                <h4>Breed Detection</h4>
+                <p class="text-muted">Upload image for breed identification</p>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a href="{{ url_for('upload_research_page') }}" class="text-decoration-none">
+            <div class="card dashboard-card p-4 text-center">
+                <i class="fas fa-upload fa-3x mb-3" style="color: #1e88e5;"></i>
+                <h4>Upload Research</h4>
+                <p class="text-muted">Submit research papers for review</p>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a href="{{ url_for('research_history') }}" class="text-decoration-none">
+            <div class="card dashboard-card p-4 text-center">
+                <i class="fas fa-history fa-3x mb-3" style="color: #8e24aa;"></i>
+                <h4>Upload History</h4>
+                <p class="text-muted">View your research submissions</p>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a href="{{ url_for('inventory_page') }}" class="text-decoration-none">
+            <div class="card dashboard-card p-4 text-center">
+                <i class="fas fa-warehouse fa-3x mb-3" style="color: var(--accent-color);"></i>
+                <h4>Inventory Management</h4>
+                <p class="text-muted">Track livestock and milk production</p>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a href="{{ url_for('detection_history') }}" class="text-decoration-none">
+            <div class="card dashboard-card p-4 text-center">
+                <i class="fas fa-clock fa-3x mb-3" style="color: #43a047;"></i>
+                <h4>Detection History</h4>
+                <p class="text-muted">View breed detection records</p>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a href="{{ url_for('view_approved_research') }}" class="text-decoration-none">
+            <div class="card dashboard-card p-4 text-center">
+                <i class="fas fa-file-alt fa-3x mb-3" style="color: #e53935;"></i>
+                <h4>Approved Research</h4>
+                <p class="text-muted">Access published papers</p>
+            </div>
+        </a>
+    </div>
+</div>
+
+<style>
+    .dashboard-card {
+        transition: all 0.3s;
+        height: 100%;
+    }
+    .dashboard-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+</style>
+{% endblock %}

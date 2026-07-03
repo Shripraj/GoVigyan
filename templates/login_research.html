@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .login-container {
+        min-height: 85vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f8f9fa;
+        margin: -20px -15px;
+        padding: 60px 15px;
+    }
+
+    .login-card {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 60px 50px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12),
+                    0 0 40px rgba(34, 197, 94, 0.6),
+                    0 0 80px rgba(34, 197, 94, 0.3);
+        max-width: 480px;
+        width: 100%;
+        border: 2px solid #22c55e;
+        animation: glow 3s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+        0%, 100% {
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12),
+                        0 0 40px rgba(34, 197, 94, 0.6),
+                        0 0 80px rgba(34, 197, 94, 0.3);
+        }
+        50% {
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12),
+                        0 0 50px rgba(34, 197, 94, 0.8),
+                        0 0 100px rgba(34, 197, 94, 0.4);
+        }
+    }
+
+    .login-title {
+        color: #1a202c;
+        font-weight: 600;
+        font-size: 1.75rem;
+        margin-bottom: 12px;
+        letter-spacing: -0.5px;
+    }
+
+    .login-subtitle {
+        color: #718096;
+        font-size: 0.95rem;
+        margin-bottom: 40px;
+        font-weight: 400;
+    }
+
+    .form-control {
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        padding: 14px 18px;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+        margin-bottom: 18px;
+    }
+
+    .form-control:focus {
+        border-color: #22c55e;
+        box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1),
+                    0 0 20px rgba(34, 197, 94, 0.3);
+        outline: none;
+    }
+
+    .btn-login {
+        border: 1px solid #22c55e;
+        border-radius: 6px;
+        padding: 14px 24px;
+        font-size: 1rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        margin-bottom: 18px;
+        background: #22c55e;
+        color: #ffffff;
+    }
+
+    .btn-login:hover {
+        background: #16a34a;
+        border-color: #16a34a;
+        color: #ffffff;
+        transform: translateY(-2px);
+        box-shadow: 0 0 20px rgba(34, 197, 94, 0.6),
+                    0 0 40px rgba(34, 197, 94, 0.3),
+                    0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-google {
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        padding: 14px 24px;
+        font-size: 1rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        background: #ffffff;
+        color: #495057;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+    }
+
+    .btn-google:hover {
+        background: #f8f9fa;
+        border-color: #22c55e;
+        color: #212529;
+        text-decoration: none;
+        transform: translateY(-2px);
+        box-shadow: 0 0 20px rgba(34, 197, 94, 0.6),
+                    0 0 40px rgba(34, 197, 94, 0.3),
+                    0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-google i {
+        margin-right: 10px;
+        font-size: 1.2rem;
+    }
+
+    .divider {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        margin: 24px 0;
+        color: #a0aec0;
+        font-size: 0.875rem;
+    }
+
+    .divider::before,
+    .divider::after {
+        content: '';
+        flex: 1;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .divider span {
+        padding: 0 12px;
+    }
+
+    @media (max-width: 768px) {
+        .login-card {
+            padding: 40px 30px;
+        }
+
+        .login-title {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card p-5">
+
+            <h2 class="text-center mb-3">Researcher Login</h2>
+
+            <form action="{{ url_for('login_research_auth') }}" method="POST">
+
+                <input type="email" class="form-control mb-3" name="email" placeholder="Email" required>
+                <input type="password" class="form-control mb-3" name="password" placeholder="Password" required>
+
+                <button class="btn btn-warning w-100 mb-3" type="submit">Login</button>
+            </form>
+
+            <a href="{{ url_for('google_login', next='research') }}" class="btn btn-light border w-100">
+                <i class="fab fa-google"></i> Login with Google
+            </a>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

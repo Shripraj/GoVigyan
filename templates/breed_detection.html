@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+        <div class="card p-5">
+            <h2 class="text-center mb-4">
+                <i class="fas fa-camera"></i> Breed Detection
+            </h2>
+
+            <div class="text-center mb-4">
+                <div id="imagePreview" class="mb-3" style="display:none;">
+                    <img id="preview" src="" alt="Preview" class="img-fluid rounded" style="max-height: 400px;">
+                </div>
+
+                <div class="mb-3">
+                    <label for="imageInput" class="btn btn-primary btn-lg">
+                        <i class="fas fa-upload"></i> Choose Image
+                    </label>
+                    <input type="file" id="imageInput" accept="image/*" class="d-none">
+                </div>
+
+                <button id="detectBtn" class="btn btn-success btn-lg" style="display:none;">
+                    <i class="fas fa-search"></i> Detect Breed
+                </button>
+            </div>
+
+            <div id="loadingDiv" style="display:none;" class="text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Analyzing image...</p>
+            </div>
+
+            <div id="resultDiv" style="display:none;">
+                <div class="alert alert-success">
+                    <h4 class="alert-heading">Detection Results</h4>
+                    <hr>
+                    <h5>Breed: <span id="breedName"></span></h5>
+                    <p>Confidence: <span id="confidence"></span>%</p>
+                    <hr>
+                    <h6>Breed Information:</h6>
+                    <p><strong>Description:</strong> <span id="description"></span></p>
+                    <p><strong>Origin:</strong> <span id="origin"></span></p>
+                    <p><strong>Average Milk Production:</strong> <span id="milkProduction"></span> liters/year</p>
+                    <p><strong>Characteristics:</strong> <span id="characteristics"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const imageInput = document.getElementById('imageInput');
+const preview = document.getElementById('preview');
+const imagePreview = document.getElementById('imagePreview');
+const detectBtn = document.getElementById('detectBtn');
+const loadingDiv = document.getElementById('loadingDiv');
+const resultDiv = document.getElementById('resultDiv');
+
+imageInput.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            imagePreview.style.display = 'block';
+            detectBtn.style.display = 'inline-block';
+            resultDiv.style.display = 'none';
+        }
+        reader.readAsDataURL(file);
+    }
+});
+
+detectBtn.addEventListener('click', function() {
+    const file = imageInput.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    loadingDiv.style.display = 'block';
+    detectBtn.disabled = true;
+    resultDiv.style.display = 'none';
+
+    fetch('{{ url_for("detect_breed") }}', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        loadingDiv.style.display = 'none';
+        detectBtn.disabled = false;
+        resultDiv.style.display = 'block';
+
+        document.getElementById('breedName').textContent = data.breed;
+        document.getElementById('confidence').textContent = (data.confidence * 100).toFixed(2);
+        document.getElementById('description').textContent = data.info.description || 'N/A';
+        document.getElementById('origin').textContent = data.info.origin || 'N/A';
+        document.getElementById('milkProduction').textContent = data.info.avg_milk_production || 'N/A';
+        document.getElementById('characteristics').textContent = data.info.characteristics || 'N/A';
+    })
+    .catch(error => {
+        loadingDiv.style.display = 'none';
+        detectBtn.disabled = false;
+        alert('Error detecting breed: ' + error);
+    });
+});
+</script>
+{% endblock %}

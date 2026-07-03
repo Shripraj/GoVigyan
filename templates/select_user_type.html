@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8">
+        <div class="card p-5">
+            <h2 class="text-center mb-4">Select Your Account Type</h2>
+            <p class="text-center text-muted mb-5">Choose the option that best describes your role</p>
+
+            <form method="POST" action="{{ url_for('complete_registration') }}">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="card user-type-card p-4 text-center h-100" onclick="selectUserType('normal')">
+                            <input type="radio" name="user_type" value="normal" id="normal" class="d-none">
+                            <label for="normal" class="w-100 cursor-pointer">
+                                <i class="fas fa-user fa-3x mb-3" style="color: var(--primary-color);"></i>
+                                <h4>Normal User</h4>
+                                <p class="text-muted">Breed detection and information access</p>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card user-type-card p-4 text-center h-100" onclick="selectUserType('research')">
+                            <input type="radio" name="user_type" value="research" id="research" class="d-none">
+                            <label for="research" class="w-100 cursor-pointer">
+                                <i class="fas fa-flask fa-3x mb-3" style="color: var(--primary-color);"></i>
+                                <h4>Research & Inventory</h4>
+                                <p class="text-muted">Upload research and manage livestock inventory</p>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg" id="continueBtn" disabled>
+                        <i class="fas fa-arrow-right"></i> Continue
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .user-type-card {
+        cursor: pointer;
+        transition: all 0.3s;
+        border: 3px solid transparent;
+    }
+    .user-type-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--primary-color);
+    }
+    .user-type-card.selected {
+        border-color: var(--primary-color);
+        background-color: #f0f8f0;
+    }
+</style>
+
+<script>
+function selectUserType(type) {
+    document.querySelectorAll('.user-type-card').forEach(card => {
+        card.classList.remove('selected');
+    });
+    document.getElementById(type).checked = true;
+    document.getElementById(type).closest('.user-type-card').classList.add('selected');
+    document.getElementById('continueBtn').disabled = false;
+}
+</script>
+{% endblock %}

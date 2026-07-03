@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card p-5 shadow">
+            <h3 class="text-center mb-4">Create Account</h3>
+
+            <form action="{{ url_for('signup') }}" method="POST">
+
+                <div class="mb-3">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" name="name" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" name="password" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Select User Role</label>
+                    <select name="user_type" class="form-control" required>
+                        <option value="normal">Normal User</option>
+                        <option value="research">Researcher</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-success w-100">Sign Up</button>
+            </form>
+
+            <div class="text-center mt-3">
+                <a href="{{ url_for('login_selection') }}">Already have an account? Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
